@@ -16,6 +16,7 @@ class Album(models.Model):
 
     # Decimal preferred in currency as small calculation errors happen in float
     cost = models.DecimalField(null=False, decimal_places=4, max_digits=10)
+    isApproved = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Album Name: {}'.format(self.name)
@@ -23,3 +24,8 @@ class Album(models.Model):
     def gg(self):
         for i in Artist.objects.all():
             i.album_set.all()
+
+    def save(self, *args, **kwargs):
+        # whenever you change the Albums (isApproved) it should changes corresponding Artist
+        super(Album, self).save(*args, **kwargs)
+        Artist.save(self.artist)
