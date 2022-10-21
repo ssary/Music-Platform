@@ -2,9 +2,15 @@ from django.contrib import admin
 from .models import Artist
 from albums.models import Album
 from django import forms
+
+class AlbumInline(admin.StackedInline):
+    model = Album
+
+
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     readonly_fields = ['approved_albums']
+    inlines = [AlbumInline]
 
 
 #
