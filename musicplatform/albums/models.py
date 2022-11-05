@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class Album(models.Model):
     # when an artist is removed his albums is removed too
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)
+    artist = models.ForeignKey(Artist, related_name='albums', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, default='New Album')
 
     # aware of timezones: time zone is UTC
