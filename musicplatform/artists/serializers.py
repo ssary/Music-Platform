@@ -13,7 +13,7 @@ class SecondAlbumSerializer(serializers.ModelSerializer):
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    albums = SecondAlbumSerializer(many=True)
+    albums = SecondAlbumSerializer(many=True, required=False)
     class Meta:
         model=Artist
         fields = '__all__'
