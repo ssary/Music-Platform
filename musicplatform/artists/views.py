@@ -1,29 +1,36 @@
 import json
 
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Artist
 from .pagination import CustomPagination
 from .serializers import ArtistSerializer
+from django.shortcuts import render, redirect
 
 
 class ArtistsView(APIView, CustomPagination):
+
     def get(self, request):
         artists = Artist.objects.all()
         results = self.paginate_queryset(artists, request, view=self)
         serializer = ArtistSerializer(results, many=True)
         return self.get_paginated_response(serializer.data)
 
-    @login_required(login_url='/login/')
+    # require login to create an artist
     def post(self, request):
-        serilaizer = ArtistSerializer(data=request.data)
-        if serilaizer.is_valid():
-            serilaizer.save()
-            return Response(serilaizer.data)
-        return Response(serilaizer.errors)
+        if request.user.is_authenticated:
+            serilaizer = ArtistSerializer(data=request.data)
+            if serilaizer.is_valid():
+                serilaizer.save()
+                return Response(serilaizer.data)
+            else:
+                return Response(serilaizer.errors)
+        else:
+            return redirect('/members/login_user')
 
 
 class ArtistView(APIView):
