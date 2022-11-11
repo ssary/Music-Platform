@@ -30,7 +30,7 @@ class ArtistsView(APIView, CustomPagination):
             else:
                 return Response(serilaizer.errors)
         else:
-            return redirect('/members/login_user')
+            return redirect('/authentication/loginUser')
 
 
 class ArtistView(APIView):
